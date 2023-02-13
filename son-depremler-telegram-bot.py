@@ -17,6 +17,8 @@ bot_id="<bot_token>"
 chat_id_log= "<chatid>"
 chat_id_news="<log_channel_chatid>" # chat_id_news is optional. Is the log channel
 
+now = datetime.datetime.now()
+
 def getData(): # Get data from url
 
     # Converting the data we access from the internet to python
@@ -57,7 +59,7 @@ def sendMessage(data): # Send message to Telegram
         print('telegram push error: ' + str(exc))
 
 def sendReport(): # Send message to Telegram log channel. This function can be deleted if the log channel is not used
-    text="working now time: " + str(datetime.datetime.now())
+    text=f"working now time: {now.hour}:{now.minute}"
     try:
         # Telegram API connection
         send = requests.get(f'https://api.telegram.org/bot{bot_id}/sendMessage?chat_id={chat_id_log}&text=' + text, timeout=2)
@@ -73,10 +75,10 @@ def sendReport(): # Send message to Telegram log channel. This function can be d
 
 # It creates and saves the ID so that it does not send the last message again
 lastMessage=0
-# Sends notification when this number is a multiple of 6 (line:87)
+# Log channel counter
 reportNum=0
 
-while True:
+while True: # Delete sendReport() and reportNum if you are not going to use the log system
     data= getData()
 
     if not (lastMessage== data[-1]):
@@ -84,9 +86,10 @@ while True:
             lastMessage=data[-1]
             sendMessage(data)
 
-    if reportNum%60==0:
+    # reportNum / 5 = time to throw log message
+    if(reportNum == 90):
         sendReport()
-        reportNum=0
-        
-    reportNum+=1
+        reportNum = 0
+
+    reportNum += 1
     time.sleep(5)
