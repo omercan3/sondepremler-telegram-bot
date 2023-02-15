@@ -6,7 +6,7 @@ Oluşan son depremleri https://deprem.afad.gov.tr/ sitesinden veri olarak getiri
 ‏‏‏‏‏‏‏‏   
 ## Topluluk
 
-Topluluğa katılmak veya projeye katkı sağlamak için:
+Bake Yazılım Ağına katılmak veya projeye katkı sağlamak için:
 
 [![Discord](https://img.shields.io/discord/1073216057415831573?label=Discord&logo=Discord&style=social)](https://discord.gg/ebTPeDRVXS)
 ‏‏‏‏‏‏‏‏   
