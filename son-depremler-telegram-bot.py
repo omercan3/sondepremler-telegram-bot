@@ -42,8 +42,42 @@ def getData(): # Get data from url
 
 def sendMessage(data): # Send message to Telegram
 
+    # Converting the numeric date system to characteristic
+    month = None
+    monthstring = None
+    date_str = data[0] # Access date data from datas
+    date_dt = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S") # Convert data to date format
+    dateNumber = date_dt.month
+
+    if dateNumber == 1:
+        month = "Ocak" # January
+    elif dateNumber == 2:
+        month = "Şubat" # February
+    elif dateNumber == 3:
+        month = "Mart" # March
+    elif dateNumber == 4:
+        month = "Nisan" # April
+    elif dateNumber == 5:
+        month = "Mayıs" # May
+    elif dateNumber == 6:
+        month = "Haziran" # June
+    elif dateNumber == 7:
+        month = "Temmuz" # July
+    elif dateNumber == 8:
+        month = "Ağustos" # Agust
+    elif dateNumber == 9:
+        month = "Eylül" # September
+    elif dateNumber == 10:
+        month = "Ekim" # October
+    elif dateNumber == 11:
+        month = "Kasım" # November
+    elif dateNumber == 12:
+        month = "Aralık" # December
+
+    monthstring = f'{date_dt.day} {month} {date_dt.year} / {date_dt.hour}:{date_dt.minute}'
+
     # The content of the message to be sent
-    text=f"· Yer: {data[6]}\n· Büyüklük: {data[5]}\n· Tarih: {data[0]}"
+    text=f"· Yer: {data[6]}\n· Büyüklük: {data[5]}\n· Tarih: {monthstring}"
     try:
         # Telegram API connection
         send = requests.get(
@@ -59,7 +93,7 @@ def sendMessage(data): # Send message to Telegram
         print('telegram push error: ' + str(exc))
 
 def sendReport(): # Send message to Telegram log channel. This function can be deleted if the log channel is not used
-    text=f"working now time: {now.hour}:{now.minute}"
+    text=f"working now time: {now.hour}:{now.minute}+ -1001733553587"
     try:
         # Telegram API connection
         send = requests.get(f'https://api.telegram.org/bot{bot_id}/sendMessage?chat_id={chat_id_log}&text=' + text, timeout=2)
@@ -74,15 +108,17 @@ def sendReport(): # Send message to Telegram log channel. This function can be d
 
 
 # It creates and saves the ID so that it does not send the last message again
-lastMessage=0
+lastMessage = 0
 # Log channel counter
-reportNum=0
+reportNum = 0
+# Shares earthquakes above this magnitude
+magnitude = 2.5
 
 while True: # Delete sendReport() and reportNum if you are not going to use the log system
     data= getData()
 
     if not (lastMessage== data[-1]):
-        if(float(data[5])>2.5):
+        if(float(data[5])>magnitude):
             lastMessage=data[-1]
             sendMessage(data)
 
